@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 module "bigquery" {
   count = length(var.data_levels)
 
@@ -34,10 +33,10 @@ module "dataform" {
   dataform_remote_repository_token = var.dataform_remote_repository_url
 }
 
-# module "datacatalog" {
-#   source                                      = "./modules/datacatalog"
-#   project_id                                  = var.project_id
-#   region                                      = var.region
-#   data_product_metadata_template_name         = var.data_product_metadata_template_name
-#   data_product_metadata_template_display_name = var.data_product_metadata_template_display_name
-# }
+module "datacatalog" {
+  source        = "./modules/datacatalog"
+  project_id    = var.project_id
+  region        = var.region
+  tag_templates = var.tag_templates
+}
+
