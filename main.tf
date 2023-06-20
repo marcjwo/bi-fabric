@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+locals {
+  service_account_dataform = "service-${data.google_project.project.number}@gcp-sa-dataform.iam.gserviceaccount.com"
+}
+
 module "bigquery" {
   count = length(var.data_levels)
 
@@ -26,11 +34,13 @@ module "bigquery" {
 
 module "dataform" {
   source                           = "./modules/dataform"
+  project_id                       = var.project_id
   region                           = var.region
   dataform_secret_name             = var.dataform_secret_name
   dataform_repository_name         = var.dataform_repository_name
   dataform_remote_repository_url   = var.dataform_remote_repository_url
   dataform_remote_repository_token = var.dataform_remote_repository_url
+  service_account_dataform         = local.service_account_dataform
 }
 
 module "datacatalog" {
@@ -39,4 +49,3 @@ module "datacatalog" {
   region        = var.region
   tag_templates = var.tag_templates
 }
-

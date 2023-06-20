@@ -21,6 +21,13 @@
 #   name     = "my/repository"
 # }
 
+locals {
+  roles = [
+    "roles/bigquery.user",
+    "roles/bigquery.editor"
+  ]
+}
+
 resource "google_secret_manager_secret" "secret" {
   provider  = google-beta
   secret_id = var.dataform_secret_name
@@ -50,4 +57,11 @@ resource "google_dataform_repository" "dataform_repository" {
     default_branch                      = var.dataform_remote_repository_branch
     authentication_token_secret_version = google_secret_manager_secret_version.secret_version.id
   }
+}
+
+resource "google_project_iam_member" "dataform_service_account" {
+  project = var.project_id
+  count   = length(local.roles)
+  role    = local.roles[count.index]
+  member  = "serviceAccount:${var.service_account_dataform}"
 }

@@ -1,3 +1,7 @@
+variable "project_id" {
+  type = string
+}
+
 variable "dataform_repository_name" {
   type = string
 }
@@ -20,5 +24,9 @@ variable "dataform_secret_name" {
 }
 
 variable "region" {
+  type = string
+}
+
+variable "service_account_dataform" {
   type = string
 }
