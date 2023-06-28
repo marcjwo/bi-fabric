@@ -24,7 +24,8 @@
 locals {
   roles = [
     "roles/bigquery.user",
-    "roles/bigquery.editor"
+    "roles/bigquery.editor",
+    "roles/bigquery.connections.use"
   ]
 }
 

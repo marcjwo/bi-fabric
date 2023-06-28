@@ -4,7 +4,7 @@ locals {
   tag_template    = { for tag_template in var.tag_templates : tag_template["id"] => tag_template }
 }
 
-resource "google_data_catalog_tag_template" "this" {
+resource "google_data_catalog_tag_template" "business_metadata" {
   for_each        = local.tag_template
   project         = var.project_id
   region          = var.region
