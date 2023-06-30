@@ -1,4 +1,4 @@
-project_id                        = "semantics-390012"
+project_id                        = "semantic-layer-playground"
 data_levels                       = ["source_aligned", "transformed", "analytical"]
 data_domains                      = ["marketing", "sales", "hr"]
 dataform_repository_name          = "dataform_repository"

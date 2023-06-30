@@ -16,7 +16,7 @@
 
 data "google_project" "project" {
   project_id = var.project_id
-  depends_on = [time_sleep.wait_api_activation]
+  # depends_on = [time_sleep.wait_api_activation]
 }
 
 locals {
@@ -27,7 +27,7 @@ locals {
     for combination in setproduct(var.data_domains, var.data_levels) : combination[0] => combination[1]...
   }
 
-  apis_to_activate = toset([
+  apis_to_activate = [
     "serviceusage",
     "cloudresourcemanager",
     "secretmanager",
@@ -42,8 +42,10 @@ locals {
     "logging",
     "pubsub",
     "dataplex",
-    "iam"
-  ])
+    "iam",
+    "dataform"
+    # "console"
+  ]
   bi_service_account_roles = [
     "roles/bigquery.jobUser",
     "roles/bigquery.dataViewer",
@@ -53,10 +55,15 @@ locals {
 }
 
 resource "google_project_service" "apis_to_activate" {
-  for_each                   = local.apis_to_activate
-  project                    = var.project_id
-  service                    = "${each.value}.googleapis.com"
-  disable_dependent_services = true
+  for_each = toset(local.apis_to_activate)
+  project  = var.project_id
+  service  = "${each.key}.googleapis.com"
+  # disable_on_destroy         = true
+  # disable_dependent_services = true
+  timeouts {
+    create = "10m"
+    update = "40m"
+  }
 }
 
 resource "time_sleep" "wait_api_activation" {

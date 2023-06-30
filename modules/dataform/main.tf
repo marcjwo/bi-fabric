@@ -63,8 +63,9 @@ resource "google_dataform_repository" "dataform_repository" {
 }
 
 resource "google_project_iam_member" "dataform_service_account" {
-  project = var.project_id
-  count   = length(local.roles)
-  role    = local.roles[count.index]
-  member  = "serviceAccount:${var.service_account_dataform}"
+  project    = var.project_id
+  count      = length(local.roles)
+  role       = local.roles[count.index]
+  member     = "serviceAccount:${var.service_account_dataform}"
+  depends_on = [google_dataform_repository.dataform_repository]
 }
