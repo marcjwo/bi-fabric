@@ -24,8 +24,8 @@
 locals {
   roles = [
     "roles/bigquery.user",
-    "roles/bigquery.editor",
-    "roles/bigquery.connections.use"
+    "roles/bigquery.dataEditor",
+    "roles/bigquery.connectionUser"
   ]
 }
 
@@ -47,6 +47,7 @@ resource "google_secret_manager_secret_version" "secret_version" {
   secret   = google_secret_manager_secret.secret.id
 
   secret_data = var.dataform_remote_repository_token
+  depends_on  = [google_secret_manager_secret.secret]
 }
 
 resource "google_dataform_repository" "dataform_repository" {
@@ -58,6 +59,7 @@ resource "google_dataform_repository" "dataform_repository" {
     default_branch                      = var.dataform_remote_repository_branch
     authentication_token_secret_version = google_secret_manager_secret_version.secret_version.id
   }
+  depends_on = [google_secret_manager_secret_version.secret_version]
 }
 
 resource "google_project_iam_member" "dataform_service_account" {

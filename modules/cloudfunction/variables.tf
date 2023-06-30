@@ -30,9 +30,9 @@ variable "resource_bucket_name" {
   type = string
 }
 
-variable "bigquery_dataset_name" {
-  type = string
-}
+# variable "bigquery_dataset_name" {
+#   type = string
+# }
 
 variable "env_variables" {
   type = map(string)

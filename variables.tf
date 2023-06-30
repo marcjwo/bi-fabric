@@ -8,7 +8,13 @@ variable "region" {
 }
 
 variable "data_levels" {
-  type = list(any)
+  description = "Needs to be lowercase"
+  type        = list(string)
+}
+
+variable "data_domains" {
+  description = "Needs to be lowercase"
+  type        = list(string)
 }
 
 variable "dataform_repository_name" {

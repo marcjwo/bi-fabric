@@ -1,5 +1,6 @@
 project_id                        = "semantics-390012"
-data_levels                       = ["source_aligned", "transformed"]
+data_levels                       = ["source_aligned", "transformed", "analytical"]
+data_domains                      = ["marketing", "sales", "hr"]
 dataform_repository_name          = "dataform_repository"
 dataform_remote_repository_url    = "https://github.com"
 dataform_remote_repository_token  = "bkjklmklmkl"
@@ -22,9 +23,9 @@ tag_templates = [{
     order        = 3
     type         = "ENUM"
     values = [
-      "SOURCE_ALIGNED",
-      "CLEANSED",
-      "ANALYTICAL"
+      "source_aligned",
+      "transformed",
+      "analytical"
     ]
     is_required = true
     },
