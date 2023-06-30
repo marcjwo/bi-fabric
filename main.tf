@@ -43,7 +43,8 @@ locals {
     "pubsub",
     "dataplex",
     "iam",
-    "dataform"
+    "dataform",
+    "analyticshub"
     # "console"
   ]
   bi_service_account_roles = [

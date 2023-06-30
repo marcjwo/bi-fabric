@@ -1,6 +1,6 @@
-project_id                        = "semantic-layer-playground"
-data_levels                       = ["source_aligned", "transformed", "analytical"]
-data_domains                      = ["marketing", "sales", "hr"]
+project_id                        = "riui-terraform-trial"
+data_levels                       = ["raw", "analytical"]
+data_domains                      = ["finance", "hr"]
 dataform_repository_name          = "dataform_repository"
 dataform_remote_repository_url    = "https://github.com"
 dataform_remote_repository_token  = "bkjklmklmkl"
