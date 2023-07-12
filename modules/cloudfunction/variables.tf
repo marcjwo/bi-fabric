@@ -1,6 +1,6 @@
 variable "function_name" {
   type    = string
-  default = "tagging"
+  default = "table_tagging"
 }
 
 variable "region" {

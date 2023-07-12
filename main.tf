@@ -32,6 +32,7 @@ locals {
     "cloudresourcemanager",
     "secretmanager",
     "datacatalog",
+    "datalineage",
     "artifactregistry",
     "bigquery",
     "bigqueryconnection",
@@ -71,6 +72,13 @@ resource "google_project_service" "apis_to_activate" {
 resource "time_sleep" "wait_api_activation" {
   create_duration = "120s"
   depends_on      = [google_project_service.apis_to_activate]
+}
+
+resource "google_storage_bucket" "data_dump" {
+  name                        = "${var.project_id}-data_bucket"
+  location                    = var.region
+  force_destroy               = true
+  uniform_bucket_level_access = true
 }
 
 
@@ -115,7 +123,7 @@ resource "google_storage_bucket" "resources_bucket" {
 #   depends_on = [time_sleep.wait_api_activation]
 # }
 
-module "bigquery_test" {
+module "bigquery" {
   source     = "./modules/bigquery"
   project_id = var.project_id
   region     = var.region

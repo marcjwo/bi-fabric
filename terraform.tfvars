@@ -1,11 +1,12 @@
-project_id                        = "looker-poc-378509"
-data_levels                       = ["raw", "done"]
-data_domains                      = ["finance", "hr"]
-dataform_repository_name          = "dataform_repository"
-dataform_remote_repository_url    = "https://github.com"
-dataform_remote_repository_token  = "bkjklmklmkl"
+project_id                        = "blaa-bi-in-a-box"
+data_levels                       = ["source", "intermediate", "output"]
+data_domains                      = ["orders", "users"]
+dataform_repository_name          = "thelook_ecommerce"
+dataform_remote_repository_url    = "https://github.com/marcjwo/thelook_dataform"
+dataform_remote_repository_token  = "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"
 dataform_secret_name              = "dataform_secret"
 dataform_remote_repository_branch = "main"
+region                            = "europe-west3"
 # data_product_metadata_template_name         = "metadata_template"
 # data_product_metadata_template_display_name = "metadata_template_display_name"
 tag_templates = [{
@@ -23,9 +24,9 @@ tag_templates = [{
     order        = 3
     type         = "ENUM"
     values = [
-      "source_aligned",
-      "transformed",
-      "analytical"
+      "source",
+      "intermediate",
+      "output"
     ]
     is_required = true
     },
