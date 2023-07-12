@@ -1,5 +1,5 @@
-project_id                        = "riui-terraform-trial"
-data_levels                       = ["raw", "analytical"]
+project_id                        = "looker-poc-378509"
+data_levels                       = ["raw", "done"]
 data_domains                      = ["finance", "hr"]
 dataform_repository_name          = "dataform_repository"
 dataform_remote_repository_url    = "https://github.com"

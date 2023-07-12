@@ -44,7 +44,8 @@ locals {
     "dataplex",
     "iam",
     "dataform",
-    "analyticshub"
+    "analyticshub",
+    "metastore"
     # "console"
   ]
   bi_service_account_roles = [
@@ -105,11 +106,21 @@ resource "google_storage_bucket" "resources_bucket" {
 #   labels     = { "domain" : local.domains_and_levels[count.index][0], "level" : local.domains_and_levels[count.index][1] }
 # }
 
-module "bigquery" {
+# module "bigquery" {
+#   source     = "./modules/bigquery"
+#   project_id = var.project_id
+#   region     = var.region
+#   domains    = var.data_domains
+#   levels     = var.data_levels
+#   depends_on = [time_sleep.wait_api_activation]
+# }
+
+module "bigquery_test" {
   source     = "./modules/bigquery"
   project_id = var.project_id
   region     = var.region
-  domains    = var.data_domains
+  for_each   = toset(var.data_domains)
+  domain     = each.value
   levels     = var.data_levels
   depends_on = [time_sleep.wait_api_activation]
 }

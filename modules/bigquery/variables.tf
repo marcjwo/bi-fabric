@@ -18,8 +18,12 @@ variable "levels" {
   type = list(string)
 }
 
-variable "domains" {
-  type = list(string)
+# variable "domains" {
+#   type = list(string)
+# }
+
+variable "domain" {
+  type = string
 }
 
 # variable "lake_name" {

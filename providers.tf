@@ -29,7 +29,7 @@ data "google_service_account_access_token" "default" {
     "userinfo-email",
     "cloud-platform"
   ]
-  lifetime = "1200s"
+  lifetime = "3600s"
 }
 
 provider "google" {
