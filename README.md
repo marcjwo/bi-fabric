@@ -1,80 +1,68 @@
 # Readme
 
-Hello and welcome to BI in a Box.
+Hello and welcome to Cloud BI Fabric
 
 ## Description and Goals
 
-BI in a Box helps to set up and deploy a structured cloud data platform that serves the need to implement Business Intelligence on top of it.
+Cloud BI Fabric helps to set up and deploy a structured cloud data platform that serves the need to implement Business Intelligence on top of it.
 
-This project/repository provides a boilerplate code asset that enables users to deploy a cloud data platform that is ready to be consumed by business intelligence tools and already included in other areas of the cloud platform: data governance, data catalog, etc.
+This project/repository provides a boilerplate code asset that enables users to deploy a minimal cloud data platform that is ready to be consumed by business intelligence tools and already included in other areas of the cloud platform: data governance, data catalog, etc.
 The goal is, to help users jump the first hurdle of setting something seemingly complicated up, see how it works and then enhance the given solution according to their needs.
+If wanted, this also comes with a example dataform repository built on top of the `thelook_ecommerce` dataset.
 
 ## Requirements
 
-For this asset to work, the user needs an existing Google Cloud Project with billing activated. A definition of the different data domains (marketing, sales, hr, etc) as well as the decision on data layers/depth should have been concluded already.
+For this asset to work, the following things are required:
+
+- a Google Cloud Project with billing activated
+- a Google Cloud Bucket used to store the Terraform state file (will be created)
+- a service account that is used to run terraform and can be impersonated by the account used (will be created)
+- the right APIs activated
 
 ## How to use
 
-Before we start, we need to set a few env variables (do not c&p the dollar sign):
+Before we start, we need to set a few env variables in the terminal(do not c&p the dollar sign):
 
 ```
-$ export PROJECT_ID=
-$ export ACCOUNT=
-$ export TF_SA=
-$ export REGION=
-$ export CONFIG=
-$ export TF_VARIABLEFILENAME=
+$ export PROJECT_ID=<Your GCP Project>
+$ export ACCOUNT=<Your Account>
+$ export TERRAFORM_SA=<The name of the service account to be used for Terraform>
+$ export REGION=<Your region>
+$ export TF_BUCKET=$PROJECT_ID-terraform
 ```
 
-After set, execute the script (Note: this is also creating a gcloud config as per good practice - if not required, remove the first step of the script)
+Next up, authenticate into Gcloud (please note, both these require confirmation in a browser window):
 
 ```
-$ ./scripts/activate_gcloud.sh
+gcloud auth login --project $PROJECT_ID
+gcloud auth application-default login --project $PROJECT_ID
 ```
 
-The script executes and outputs two commands to be executed as well. Note: these will bring up a browser window that requires the user to authenticate using the account credentials.
+You can confirm that it has worked by checking `gcloud config list` and making sure that the information matches whats expected.
 
-In addition to the above, we need a Service Account to be used to run Terraform and APIs need to enabled to get started. The user can do so using the console or through another script.
-
-```
-dals;,dasl,
-```
-
-If through the console, the required APIs that need to be active are (this is, if the project is fresh - these are likely to be activated already):
+After that, we need to activate the required APIs, create the terraform account that is going to be used to run terraform, and the GCS bucket to store the state file.
 
 ```
-cloudresourcemanager.googleapis.com
-iam.googleapis.com
-iamcredentials.googleapis.com
-serviceusage.googleapis
+$ ./getting_started/enable_required_apis.sh
+$ ./getting_started/create_terraform_service_account.sh
+$ ./getting_started/create_terraform_state_bucket.sh
 ```
 
-The service account needs the `Owner` role, and we need to make sure that the account used to execute Terraform with, is allowed to use the service account through being a `Service Account User` and `Service Account Token Creator`.
-
-The above can also be achieved using the script
+Finally, we need to create a \*.tfvars to let terraform know what to deploy:
 
 ```
-$ ./scripts/prepare_gcp.sh
-```
+project_id                        = <Your Project ID
+data_levels                       = <Your desired data levels, e.g. ["source", "intermediate", "output"]>
+data_domains                      = <Your desired domains of data, e.g. ["orders", "web"]>
+dataform_repository_name          = <Your dataform repository name>
+dataform_remote_repository_url    = <Link to Dataform Repository> If you want to try out the demo: "https://github.com/marcjwo/thelook_dataform"
+dataform_remote_repository_token  = <Your Github access token to be used by dataform. Follow instructions here:(https://cloud.google.com/dataform/docs/connect-repository)>
+dataform_secret_name              = <Secret where the token is stored>
+dataform_remote_repository_branch = <Branch name, typically main>
+region                            = <Your cloud region>
 
-Now that we are set, we need to set the terraform variables in a file
+# Below, the variable to create tag_templates - these follow a specific format, an example is below. This example can be used and is in line with the tagging function thats being deployed with the platform.
 
-```
-$ touch $TF_VARIABLEFILENAME.tfvars
-```
-
-with the following variables to set. [Please refer to this link re the dataform specific settings](https://cloud.google.com/dataform/docs/connect-repository)
-
-```
-project_id                        = <your project id, should match with env variable PROJECT_ID>,
-region                            = <your desired region, should match with env variable REGION>,
-data_levels                       = <desired layers of data> Example: ["raw", "staging", "analytical]
-data_domains                      = <desired data domains> Example: ["finance", "hr"]
-dataform_repository_name          = <dataform repository name>
-dataform_remote_repository_url    = <dataform repo on Git> (Currently only Github supported)
-dataform_remote_repository_token  = <token required for external dataform reposistory>
-dataform_secret_name              = <name of the secret to be created>
-dataform_remote_repository_branch = <branch to be used> "main"
 tag_templates = [{
   id           = "tag_template1"
   display_name = "tag_template1"
@@ -82,17 +70,17 @@ tag_templates = [{
   fields = [{
     order       = 1
     id          = "data_owner"
-    type        = "STRING" <Thats an example for a string type tag field>
+    type        = "STRING"
     is_required = true
     }, {
     id           = "data_level"
     display_name = "Data Level"
     order        = 3
-    type         = "ENUM" <Thats an example for an enum type tag field>
+    type         = "ENUM"
     values = [
-      "source_aligned",
-      "transformed",
-      "analytical"
+      "source",
+      "intermediate",
+      "output"
     ]
     is_required = true
     },
@@ -106,9 +94,23 @@ tag_templates = [{
 }]
 ```
 
-_Important note:_ The tag template here goes 🤝 hand in hand with the cloud function thats being deployed and can be found under `./functions/tagging` - more on that under "Underlying principle"
+_Important note:_ The tag template here goes 🤝 hand in hand with the cloud function thats being deployed and can be found under `./functions/tagging`.
+
+Finally, we can start the deploying:
+
+```
+$ terraform init
+$ terraform plan
+$ terraform apply -var-file=<yourvarfile.tfvars> (This arg can be avoided by calling the file terraform.tfvars)
+```
+
+## Whats being deployed?
+
+TBD
 
 ## How does this work?
+
+TBD
 
 For demonstrating purposes, see schema below.
 
