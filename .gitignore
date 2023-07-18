@@ -39,7 +39,7 @@ terraform.rc
 # *.sh
 local_version_*
 
-*.sql
+# *.sql
 
 /scripts/
 terraform.tfvars
