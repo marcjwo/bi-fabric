@@ -25,8 +25,8 @@ Before we start, we need to set a few env variables in the terminal(do not c&p t
 
 ```
 $ export PROJECT_ID=<Your GCP Project>
-$ export ACCOUNT=<Your Account>
-$ export TERRAFORM_SA=<The name of the service account to be used for Terraform>
+$ export ACCOUNT=<Your Account, email format>
+$ export TERRAFORM_SA=<The name of the service account to be used for Terraform. This will be the input for the script down below, so it needs to be set.>
 $ export REGION=<Your region>
 $ export TF_BUCKET=$PROJECT_ID-terraform
 ```
@@ -48,7 +48,7 @@ $ ./getting_started/create_terraform_service_account.sh
 $ ./getting_started/create_terraform_state_bucket.sh
 ```
 
-Finally, we need to create a \*.tfvars to let terraform know what to deploy:
+Finally, we need to create a \*.tfvars to let terraform know what to deploy. Being in the main folder of the repo, just type `touch terraform.tfvars` (or any other name you prefer)!
 
 ```
 project_id                        = <Your Project ID
