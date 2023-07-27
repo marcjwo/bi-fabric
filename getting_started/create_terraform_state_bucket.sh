@@ -21,5 +21,5 @@
 gsutil mb -p $PROJECT_ID -l $REGION -b on gs://$TF_BUCKET
 
 gcloud storage buckets add-iam-policy-binding gs://${TF_BUCKET} \
---member="serviceAccount:${TF_SA}@${PROJECT_ID}.iam.gserviceaccount.com" \
+--member="serviceAccount:${TERRAFORM_SA}@${PROJECT_ID}.iam.gserviceaccount.com" \
 --role="roles/storage.admin"
