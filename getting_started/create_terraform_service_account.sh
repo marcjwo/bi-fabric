@@ -24,7 +24,7 @@ gcloud iam service-accounts create "${TERRAFORM_SA}" \
     --display-name="Terraform Service Account"
 
 gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
-    --member="serviceAccount:${TF_SA}@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --member="serviceAccount:${TERRAFORM_SA}@${PROJECT_ID}.iam.gserviceaccount.com" \
     --role="roles/owner"
 
 gcloud iam service-accounts add-iam-policy-binding \
