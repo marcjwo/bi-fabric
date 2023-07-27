@@ -60,6 +60,7 @@ dataform_remote_repository_token  = <Your Github access token to be used by data
 dataform_secret_name              = <Secret where the token is stored>
 dataform_remote_repository_branch = <Branch name, typically main>
 region                            = <Your cloud region>
+terraform_sa                      = <The service account that is used for terraform (and was created in the previous step) - only the prefix before the '@' required here>
 
 # Below, the variable to create tag_templates - these follow a specific format, an example is below. This example can be used and is in line with the tagging function thats being deployed with the platform.
 

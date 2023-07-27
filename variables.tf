@@ -7,6 +7,10 @@ variable "region" {
   default = "europe-west3"
 }
 
+variable "terraform_sa" {
+  type = string
+}
+
 variable "data_levels" {
   description = "Needs to be lowercase"
   type        = list(string)
