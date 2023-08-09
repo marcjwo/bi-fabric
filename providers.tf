@@ -24,7 +24,7 @@ provider "google" {
 
 data "google_service_account_access_token" "default" {
   provider               = google.service_account
-  target_service_account = "${terraform_sa}@${var.project_id}.iam.gserviceaccount.com"
+  target_service_account = "${var.terraform_sa}@${var.project_id}.iam.gserviceaccount.com"
   scopes = [
     "userinfo-email",
     "cloud-platform"

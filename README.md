@@ -100,7 +100,7 @@ _Important note:_ The tag template here goes 🤝 hand in hand with the cloud fu
 Finally, we can start the deploying:
 
 ```
-$ terraform init
+$ terraform init -backend-config="bucket=${TF_BUCKET}"
 $ terraform plan
 $ terraform apply -var-file=<yourvarfile.tfvars> (This arg can be avoided by calling the file terraform.tfvars)
 ```
