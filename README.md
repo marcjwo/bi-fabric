@@ -18,6 +18,7 @@ For this asset to work, the following things are required:
 - a Google Cloud Bucket used to store the Terraform state file (will be created)
 - a service account that is used to run terraform and can be impersonated by the account used (will be created)
 - the right APIs activated
+- Terraform => 1.3.0 installed
 
 ## How to use
 
