@@ -26,7 +26,7 @@ Before we start, we need to set a few env variables in the terminal(do not c&p t
 ```
 $ export PROJECT_ID=<Your GCP Project>
 $ export ACCOUNT=<Your Account, email format>
-$ export TERRAFORM_SA=<The name of the service account to be used for Terraform. This will be the input for the script down below, so it needs to be set.>
+$ export TERRAFORM_SA=<The name of the service account to be used for Terraform. This will be the input for the script down below, so it needs to be set. Only the name required of the service account, not the full adress (you will hit a 30 character limit)>
 $ export REGION=<Your region>
 $ export TF_BUCKET=$PROJECT_ID-terraform
 ```
@@ -43,9 +43,9 @@ You can confirm that it has worked by checking `gcloud config list` and making s
 After that, we need to activate the required APIs, create the terraform account that is going to be used to run terraform, and the GCS bucket to store the state file.
 
 ```
-$ ./getting_started/enable_required_apis.sh
-$ ./getting_started/create_terraform_service_account.sh
-$ ./getting_started/create_terraform_state_bucket.sh
+$ bash ./getting_started/enable_required_apis.sh
+$ bash ./getting_started/create_terraform_service_account.sh
+$ bash ./getting_started/create_terraform_state_bucket.sh
 ```
 
 Finally, we need to create a \*.tfvars to let terraform know what to deploy. Being in the main folder of the repo, just type `touch terraform.tfvars` (or any other name you prefer)!
