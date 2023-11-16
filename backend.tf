@@ -12,8 +12,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-terraform {
-  backend "gcs" {
-    prefix = "terraform/state"
-  }
-}
+# terraform {
+#   backend "gcs" {
+#     prefix = "terraform/state"
+#   }
+# }

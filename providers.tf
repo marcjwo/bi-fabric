@@ -14,36 +14,36 @@
  * limitations under the License.
  */
 
-provider "google" {
-  alias = "service_account"
-  scopes = [
-    "https://www.googleapis.com/auth/cloud-platform",
-    "https://www.googleapis.com/auth/userinfo.email",
-  ]
-}
+# provider "google" {
+#   alias = "service_account"
+#   scopes = [
+#     "https://www.googleapis.com/auth/cloud-platform",
+#     "https://www.googleapis.com/auth/userinfo.email",
+#   ]
+# }
 
-data "google_service_account_access_token" "default" {
-  provider               = google.service_account
-  target_service_account = "${var.terraform_sa}@${var.project_id}.iam.gserviceaccount.com"
-  scopes = [
-    "userinfo-email",
-    "cloud-platform"
-  ]
-  lifetime = "3600s"
-}
+# data "google_service_account_access_token" "default" {
+#   provider               = google.service_account
+#   target_service_account = "${var.terraform_sa}@${var.project_id}.iam.gserviceaccount.com"
+#   scopes = [
+#     "userinfo-email",
+#     "cloud-platform"
+#   ]
+#   lifetime = "3600s"
+# }
 
-provider "google" {
-  project = var.project_id
-  region  = var.region
+# provider "google" {
+#   project = var.project_id
+#   region  = var.region
 
-  access_token    = data.google_service_account_access_token.default.access_token
-  request_timeout = "60s"
-}
+#   access_token    = data.google_service_account_access_token.default.access_token
+#   request_timeout = "60s"
+# }
 
-provider "google-beta" {
-  project = var.project_id
-  region  = var.region
+# provider "google-beta" {
+#   project = var.project_id
+#   region  = var.region
 
-  access_token    = data.google_service_account_access_token.default.access_token
-  request_timeout = "60s"
-}
+#   access_token    = data.google_service_account_access_token.default.access_token
+#   request_timeout = "60s"
+# }
