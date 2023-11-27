@@ -23,10 +23,10 @@ variable "dataform_secret_name" {
   type = string
 }
 
-variable "region" {
+variable "location" {
   type = string
 }
 
-variable "service_account_dataform" {
+variable "dataform_service_account" {
   type = string
 }

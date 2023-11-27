@@ -1,0 +1,40 @@
+### what we need:
+### tooling project that contains IAM, dataform, cloud composer, cloud scheduler, maybe Looker
+### data layers that are made up of different environments [list], individually
+
+general_settings:
+  tooling_billing_account: 0189FA-E139FD-136A58
+  tooling_parent_folder: organizations/1004437788572
+  layers_billing_account: 0189FA-E139FD-136A58
+  layers_parent_folder: organizations/1004437788572
+dataform:
+  remote_repository_url: http://blabla
+  remote_repository_branch: main
+  secret_name: tadda
+  
+tooling:
+  project_id: fast-bi-fabric
+  location: europe-west3
+layers:
+  - name: source
+    location: europe-west3
+    envs:
+    - dev
+    - uat
+    - prod
+  - name: staging
+    location: europe-west3
+    envs:
+    - dev
+    - prod
+  - name: core
+    location: europe-west3
+    envs:
+    - dev
+    - prod
+  - name: semantic
+    location: europe-west3
+    envs:
+    - dev
+    - uat
+    - prod

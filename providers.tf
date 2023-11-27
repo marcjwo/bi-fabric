@@ -34,16 +34,16 @@
 
 # provider "google" {
 #   project = var.project_id
-#   region  = var.region
+#   region  = var.location
 
 #   access_token    = data.google_service_account_access_token.default.access_token
 #   request_timeout = "60s"
 # }
 
-# provider "google-beta" {
-#   project = var.project_id
-#   region  = var.region
+provider "google-beta" {
+  project = var.project_id
+  region  = var.location
 
-#   access_token    = data.google_service_account_access_token.default.access_token
-#   request_timeout = "60s"
-# }
+  #   access_token    = data.google_service_account_access_token.default.access_token
+  #   request_timeout = "60s"
+}

@@ -38,7 +38,7 @@ resource "google_secret_manager_secret" "secret" {
   replication {
     user_managed {
       replicas {
-        location = var.region
+        location = var.location
       }
     }
   }
@@ -55,7 +55,7 @@ resource "google_secret_manager_secret_version" "secret_version" {
 resource "google_dataform_repository" "dataform_repository" {
   provider = google-beta
   name     = var.dataform_repository_name
-  region   = var.region
+  region   = var.location
 
   git_remote_settings {
     url                                 = var.dataform_remote_repository_url

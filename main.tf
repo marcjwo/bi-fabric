@@ -18,64 +18,68 @@
 #   domains_and_levels = { for combination in setproduct(var.data_domains, var.data_levels) : "${combination[0]}-${combination[1]}" => combination }
 # }
 
-module "bigquery" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric/modules/bigquery-dataset"
-  project_id = var.project_id
-  location   = var.location
-  for_each = {
-    for c in setproduct(var.data_domains, var.data_levels) : "${c[0]}_${c[1]}" => {
-      domain = c[0]
-      level  = c[1]
-    }
-  }
-  id     = "${each.value.domain}_${each.value.level}"
-  labels = { "data_domain" : "${each.value.domain}", "data_level" : "${each.value.level}", "provisioned_by" : "terraform" }
-  options = {
-    delete_contents_on_destroy = true
-    is_case_insensitive        = true
-  }
-}
+# data "google_project" "project" {
+#   project_id = var.project_id
+# }
 
-module "dataplex" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric/modules/dataplex"
-  project_id = var.project_id
-  region     = var.location
-  for_each = {
-    for c in setproduct(var.data_domains, var.data_levels) : "${c[0]}_${c[1]}" => {
-      domain = c[0]
-      level  = c[1]
-    }
-  }
-  name = each.value.domain
-  zones = {
-    "${each.value.level}" = {
-      type      = "${each.value.level}"
-      discovery = true
-      assets = {
-        bq_1 = {
-          resource_name          = "${each.value.domain}_${each.value.level}"
-          discovery_spec_enabled = true
-          resource_spec_type     = "BIGQUERY_DATASET"
-        }
-      }
-    }
-  }
-}
+# locals {
+#   service_account_dataform = "service-${data.google_project.project.number}@gcp-sa-dataform.iam.gserviceaccount.com"
+#   config                   = yamldecode(file("config.yaml"))
+# }
 
 
 
-# resource "aws_sqs_queue" "queue" {
+# module "bigquery" {
+#   source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric/modules/bigquery-dataset"
+#   project_id = var.project_id
+#   location   = var.location
 #   for_each = {
-#     for q in local.queues : "${q[0]}-${q[1]}" => {
-#       module = q[0]
-#       stage  = q[1]
+#     for c in setproduct(var.data_domains, var.data_layers) : "${c[0]}_${c[1]}" => {
+#       domain = c[0]
+#       layer  = c[1]
 #     }
 #   }
+#   id     = "${each.value.domain}_${each.value.layer}"
+#   labels = { "data_domain" : "${each.value.domain}", "data_layer" : "${each.value.layer}", "provisioned_by" : "terraform" }
+#   options = {
+#     delete_contents_on_destroy = true
+#     is_case_insensitive        = true
+#   }
+# }
 
-#   name = "${each.value.module}-${each.value.stage}"
+# module "dataform" {
+#   source                           = "./modules/dataform"
+#   project_id                       = var.project_id
+#   location                         = var.location
+#   dataform_secret_name             = var.dataform_secret_name
+#   dataform_repository_name         = var.dataform_repository_name
+#   dataform_remote_repository_url   = var.dataform_remote_repository_url
+#   dataform_remote_repository_token = var.dataform_remote_repository_token
+#   service_account_dataform         = local.service_account_dataform
+# }
 
-#   tags = {
-#     Module = each.value.module
-#     Stage  = each.value.stage
+# module "dataplex" {
+#   source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric/modules/dataplex"
+#   project_id = var.project_id
+#   region     = var.location
+#   for_each = {
+#     for c in setproduct(var.data_domains, var.data_layers) : "${c[0]}_${c[1]}" => {
+#       domain = c[0]
+#       layer  = c[1]
+#     }
+#   }
+#   name = each.value.domain
+#   zones = {
+#     "${each.value.layer}" = {
+#       type      = "${each.value.layer}"
+#       discovery = true
+#       assets = {
+#         bq_1 = {
+#           resource_name          = "${each.value.domain}_${each.value.layer}"
+#           discovery_spec_enabled = true
+#           resource_spec_type     = "BIGQUERY_DATASET"
+#         }
+#       }
+#     }
 #   }
 # }

@@ -7,16 +7,16 @@ variable "location" {
   default = "europe-west3"
 }
 
-variable "region" {
-  type    = string
-  default = "europe-west3"
-}
+# variable "region" {
+#   type    = string
+#   default = "europe-west3"
+# }
 
 # variable "terraform_sa" {
 #   type = string
 # }
 
-variable "data_levels" {
+variable "data_layers" {
   description = "Needs to be lowercase"
   type        = list(string)
 }
@@ -26,26 +26,67 @@ variable "data_domains" {
   type        = list(string)
 }
 
-# variable "dataform_repository_name" {
-#   type = string
-# }
+variable "dataform_repository_name" {
+  type = string
+}
 
-# variable "dataform_remote_repository_token" {
-#   type = string
-# }
+variable "dataform_remote_repository_token" {
+  type = string
+}
 
-# variable "dataform_remote_repository_url" {
-#   type = string
-# }
+variable "dataform_remote_repository_url" {
+  type = string
+}
 
-# variable "dataform_remote_repository_branch" {
-#   type    = string
-#   default = "main"
-# }
+variable "dataform_remote_repository_branch" {
+  type    = string
+  default = "main"
+}
 
-# variable "dataform_secret_name" {
-#   type = string
-# }
+variable "dataform_secret_name" {
+  type = string
+}
+
+variable "composer_config" {
+  description = "Composer environment configuration. It accepts only following attributes: `environment_size`, `software_config` and `workloads_config`. See [attribute reference](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/composer_environment#argument-reference---cloud-composer-2) for details on settings variables."
+  type = object({
+    environment_size = string
+    software_config  = any
+    workloads_config = object({
+      scheduler = object(
+        {
+          cpu        = number
+          memory_gb  = number
+          storage_gb = number
+          count      = number
+        }
+      )
+      web_server = object(
+        {
+          cpu        = number
+          memory_gb  = number
+          storage_gb = number
+        }
+      )
+      worker = object(
+        {
+          cpu        = number
+          memory_gb  = number
+          storage_gb = number
+          min_count  = number
+          max_count  = number
+        }
+      )
+    })
+  })
+  default = {
+    environment_size = "ENVIRONMENT_SIZE_SMALL"
+    software_config = {
+      image_version = "composer-2-airflow-2"
+    }
+    workloads_config = null
+  }
+}
 
 # variable "data_product_metadata_template_name" {
 #   type = string
