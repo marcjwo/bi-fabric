@@ -43,3 +43,5 @@ local_version_*
 
 /scripts/
 terraform.tfvars
+
+config.yaml

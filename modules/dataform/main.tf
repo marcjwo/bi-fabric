@@ -33,6 +33,7 @@ locals {
 
 resource "google_secret_manager_secret" "secret" {
   provider  = google-beta
+  project   = var.project_id
   secret_id = var.dataform_secret_name
 
   replication {
@@ -53,9 +54,11 @@ resource "google_secret_manager_secret_version" "secret_version" {
 }
 
 resource "google_dataform_repository" "dataform_repository" {
-  provider = google-beta
-  name     = var.dataform_repository_name
-  region   = var.location
+  provider        = google-beta
+  project         = var.project_id
+  name            = var.dataform_repository_name
+  region          = var.location
+  service_account = var.dataform_service_account
 
   git_remote_settings {
     url                                 = var.dataform_remote_repository_url
@@ -65,10 +68,13 @@ resource "google_dataform_repository" "dataform_repository" {
   depends_on = [google_secret_manager_secret_version.secret_version]
 }
 
-resource "google_project_iam_member" "dataform_service_account" {
-  project    = var.project_id
-  count      = length(local.roles)
-  role       = local.roles[count.index]
-  member     = "serviceAccount:${var.service_account_dataform}"
-  depends_on = [google_dataform_repository.dataform_repository]
+resource "google_dataform_repository_iam_binding" "binding" {
+  provider   = google-beta
+  project    = google_dataform_repository.dataform_repository.project
+  region     = google_dataform_repository.dataform_repository.region
+  repository = google_dataform_repository.dataform_repository.name
+  role       = "roles/editor"
+  members = [
+    "${var.editors}"
+  ]
 }

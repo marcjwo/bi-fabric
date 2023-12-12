@@ -30,3 +30,7 @@ variable "location" {
 variable "dataform_service_account" {
   type = string
 }
+
+variable "editors" {
+  type = string
+}
